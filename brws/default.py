@@ -42,7 +42,7 @@ def brws_go_back(driver, _):
 
 
 def brws_go_forward(driver, _):
-    brws_history_go(driver, -1)
+    brws_history_go(driver, 1)
 
 
 def brws_click(driver, text):
