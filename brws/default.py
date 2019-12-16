@@ -19,12 +19,12 @@ def brws_google(driver, query):
     driver.get(f"https://google.com/search?q={query}")
 
 
-def brws_pgup(driver):
+def brws_pgup(driver, _):
     body = driver.find_element_by_css_selector('body')
     body.send_keys(Keys.PAGE_UP)
 
 
-def brws_pgdn(driver):
+def brws_pgdn(driver, _):
     body = driver.find_element_by_css_selector('body')
     body.send_keys(Keys.PAGE_DOWN)
 
@@ -33,11 +33,11 @@ def brws_history_go(driver, index):
     driver.executeScript("window.history.go(-1)");
 
 
-def brws_go_back(driver):
+def brws_go_back(driver, _):
     brws_history_go(driver, -1)
 
 
-def brws_go_forward(driver):
+def brws_go_forward(driver, _):
     brws_history_go(driver, -1)
 
 
@@ -45,15 +45,15 @@ def brws_click(driver, text):
     lib.click_link_with_text(driver, text)
 
 
-def brws_signup(driver):
+def brws_signup(driver, _):
     lib.click_link_with_text(driver, "Sign up")
 
 
-def brws_signin(driver):
+def brws_signin(driver, _):
     lib.click_link_with_text(driver, "Sign in")
 
 
-def brws_get_pid(driver):
+def brws_get_pid(driver, _):
     print(os.getpid())
 
 
