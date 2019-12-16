@@ -34,6 +34,7 @@ run("Chrome", 54422, commands)
 # Default commands
 
 | Command | Action                             | Equevalent shortcut in Chrome |
+|:--------|:-----------------------------------|:------------------------------|
 | g       | Visit the url                      | Control-L + ... +Enter        |
 | g       | Click the link with text           |                               |
 | b       | Go back                            | Alt-LeftArrow                 |
