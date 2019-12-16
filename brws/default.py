@@ -29,12 +29,28 @@ def brws_pgdn(driver):
     body.send_keys(Keys.PAGE_DOWN)
 
 
+def brws_history_go(driver, index):
+    driver.executeScript("window.history.go(-1)");
+
+
+def brws_go_back(driver):
+    brws_history_go(driver, -1)
+
+
+def brws_go_forward(driver):
+    brws_history_go(driver, -1)
+
+
 def brws_click(driver, text):
     lib.click_link_with_text(driver, text)
 
 
 def brws_signup(driver):
     lib.click_link_with_text(driver, "Sign up")
+
+
+def brws_signin(driver):
+    lib.click_link_with_text(driver, "Sign in")
 
 
 def brws_get_pid(driver):
@@ -44,7 +60,10 @@ def brws_get_pid(driver):
 default_commands = {
     "g": brws_get,
     "c": brws_click,
+    "b": brws_go_back,
+    "f": brws_go_forward,
     "signup": brws_signup,
+    "signin": brws_signin,
     "u": brws_pgup,
     "d": brws_pgdn,
     "ddg": brws_ddg,
