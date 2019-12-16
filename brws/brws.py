@@ -1,5 +1,7 @@
 import os
+import signal
 import socket
+import subprocess
 import sys
 from contextlib import closing, contextmanager
 
@@ -19,7 +21,6 @@ def run_command_with_conn(conn, driver, commandlist, argv):
     with conn:
         while True:
             argv = conn.recv(1024).decode().split("%ws%")
-            print(argv)
             if not argv or not argv[0]:
                 break
 
@@ -33,7 +34,7 @@ def run_command_with_conn(conn, driver, commandlist, argv):
                 print(e)
 
 
-def br_serve(driver, commandlist, port):
+def serve(driver, commandlist, port):
     with start_browser(driver) as browser:
         with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as ss:
             ss.bind(("", port))
@@ -47,18 +48,17 @@ def bytesargv():
     return list(map(os.fsencode, sys.argv))
 
 
-def br_command(port):
+def command(port):
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
         s.connect(("", port))
         command = bytesargv()[1:]
         command_bytes = b"%ws%".join(command)
-        print(command_bytes)
         s.sendall(command_bytes)
 
 
-def br(driver, port, commands):
-    print(sys.argv)
+def run(driver, port, commands):
     if sys.argv[1] == "serve":
-        br_serve(driver, commands, port)
+        serve(driver, commands, port)
+        return
     else:
-        br_command(port)
+        command(port)

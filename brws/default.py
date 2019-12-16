@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 
-from br import br
+from brws import run
 
 
 def brws_get(driver, url):
@@ -16,12 +16,12 @@ def brws_google(driver, query):
 
 
 def brws_pgup(driver):
-    body = browser.find_element_by_css_selector('body')
+    body = driver.find_element_by_css_selector('body')
     body.send_keys(Keys.PAGE_UP)
 
 
 def brws_pgdn(driver):
-    body = browser.find_element_by_css_selector('body')
+    body = driver.find_element_by_css_selector('body')
     body.send_keys(Keys.PAGE_DOWN)
 
 
@@ -38,8 +38,9 @@ default_commands = {
     "d": brws_pgdn,
     "ddg": brws_ddg,
     "google": brws_google,
+    "__google": brws_google,
 }
 
 
 def run_default(port, driver="Chrome"):
-    brws(driver, port, default_commands)
+    run(driver, port, default_commands)
