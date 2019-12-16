@@ -30,7 +30,7 @@ def brws_pgup(driver, _):
 
 def brws_pgdn(driver, _):
     body = driver.find_element_by_css_selector('body')
-    body.send_keys(keys.page_down)
+    body.send_keys(Keys.PAGE_DOWN)
 
 
 def brws_history_go(driver, index):
@@ -50,11 +50,11 @@ def brws_click(driver, text):
 
 
 def brws_signup(driver, _):
-    lib.click_link_with_text(driver, "sign up")
+    lib.click_link_with_text(driver, "Sign up")
 
 
 def brws_signin(driver, _):
-    lib.click_link_with_text(driver, "sign in")
+    lib.click_link_with_text(driver, "Sign in")
 
 
 def brws_get_pid(driver, _):
@@ -82,5 +82,5 @@ default_commands = {
 }
 
 
-def run_default(port, driver="chrome"):
+def run_default(port, driver="Chrome"):
     run(driver, port, default_commands)
