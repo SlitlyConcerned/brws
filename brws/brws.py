@@ -29,7 +29,8 @@ def run_command_with_conn(conn, driver, commandlist, argv):
 
             print(f"Running command: {command_name}\n\twith aruments: {args}")
             try:
-                commandlist[argv[0]](driver, *argv[1:])
+                result = commandlist[argv[0]](driver, *argv[1:])
+                return result
             except Exception as e:
                 print(e)
 
@@ -61,4 +62,6 @@ def run(driver, port, commands):
         serve(driver, commands, port)
         return
     else:
-        command(port)
+        result = command(port)
+        if result:
+            print(result)
