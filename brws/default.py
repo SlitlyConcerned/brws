@@ -19,6 +19,10 @@ def brws_google(driver, query):
     driver.get(f"https://google.com/search?q={query}")
 
 
+def brws_youtube(driver, query):
+    driver.get(f"https:/youtube.com/result?q={query}")
+
+
 def brws_pgup(driver, _):
     body = driver.find_element_by_css_selector('body')
     body.send_keys(Keys.PAGE_UP)
@@ -26,7 +30,7 @@ def brws_pgup(driver, _):
 
 def brws_pgdn(driver, _):
     body = driver.find_element_by_css_selector('body')
-    body.send_keys(Keys.PAGE_DOWN)
+    body.send_keys(keys.page_down)
 
 
 def brws_history_go(driver, index):
@@ -46,11 +50,11 @@ def brws_click(driver, text):
 
 
 def brws_signup(driver, _):
-    lib.click_link_with_text(driver, "Sign up")
+    lib.click_link_with_text(driver, "sign up")
 
 
 def brws_signin(driver, _):
-    lib.click_link_with_text(driver, "Sign in")
+    lib.click_link_with_text(driver, "sign in")
 
 
 def brws_get_pid(driver, _):
@@ -72,10 +76,11 @@ default_commands = {
     "d": brws_pgdn,
     "ddg": brws_ddg,
     "google": brws_google,
+    "youtube": brws_youtube,
     "get_pid": brws_get_pid,
     "get_url": brws_show_url,
 }
 
 
-def run_default(port, driver="Chrome"):
+def run_default(port, driver="chrome"):
     run(driver, port, default_commands)
