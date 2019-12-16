@@ -55,6 +55,8 @@ def list_to_bytes(los):
 def command(port, args=None):
     if args is None:
         args = sys.argv[1:]
+    if args == [""]:
+        return
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
         s.connect(("", port))
         command = list_to_bytes(args)
