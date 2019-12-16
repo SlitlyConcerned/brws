@@ -54,7 +54,11 @@ def brws_signin(driver, _):
 
 
 def brws_get_pid(driver, _):
-    print(os.getpid())
+    return str(os.getpid())
+
+
+def brws_show_url(driver, _):
+    return driver.current_url
 
 
 default_commands = {
@@ -69,6 +73,7 @@ default_commands = {
     "ddg": brws_ddg,
     "google": brws_google,
     "get_pid": brws_get_pid,
+    "get_url": brws_show_url,
 }
 
 
