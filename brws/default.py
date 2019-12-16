@@ -1,3 +1,5 @@
+import os
+
 from selenium.webdriver.common.keys import Keys
 
 from brws import run
@@ -31,6 +33,10 @@ def brws_click(driver, term):
             elem.click()
 
 
+def brws_get_pid(driver):
+    print(os.getpid())
+
+
 default_commands = {
     "g": brws_get,
     "c": brws_click,
@@ -38,7 +44,7 @@ default_commands = {
     "d": brws_pgdn,
     "ddg": brws_ddg,
     "google": brws_google,
-    "__google": brws_google,
+    "get_pid": brws_get_pid,
 }
 
 
