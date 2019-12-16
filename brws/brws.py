@@ -73,8 +73,8 @@ def run(driver, port, commands):
         serve(driver, commands, port)
         return
     if sys.argv[1] == "commands":
-        for name, command in commands.items():
-            doc = command.__doc__
+        for name, function in commands.items():
+            doc = function.__doc__
             if doc is None:
                 doc = "No Documentation."
             else:
