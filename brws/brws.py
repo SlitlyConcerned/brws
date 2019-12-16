@@ -26,12 +26,15 @@ def start_browser(driver_name, wait=10):
 def serve(driver, commandlist, port):
     with start_browser(driver) as browser:
         with Connection(port, "bind") as connection:
-            for command, query in connection.wait_for_connections_and_receive_command_and_query():
+            for command, query ,con in connection.wait_for_connections_and_receive_command_and_query():
                 print(f"Running command: {command}\n\twith query: {query}")
                 try:
-                    return commandlist[command](browser, query)
+                    result = commandlist[command](browser, query)
+                    if result:
+                        con.sendall(result.encode())
                 except Exception as e:
                     print(e)
+                con.close()
 
 
 def command(port, userinput=None):

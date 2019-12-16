@@ -28,8 +28,7 @@ class Connection:
             con, addr = self.s.accept()
             command_and_query = con.recv(1024).decode().split(" ")
             command, query = command_and_query[0], " ".join(command_and_query[1:])
-            yield command, query
-            con.close()
+            yield command, query, con
 
     def recv(self, num=1024):
         return self.s.recv(num)
