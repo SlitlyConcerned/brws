@@ -6,6 +6,7 @@ import sys
 from contextlib import closing, contextmanager
 from pprint import pprint
 
+from prompt_toolkit import PromptSession
 from selenium import webdriver
 
 
@@ -74,8 +75,9 @@ def run(driver, port, commands):
     if sys.argv[1] == "commands":
         pprint(commands)
     if sys.argv[1] == "shell":
+        session = PromptSession()
         while True:
-            command(port, input(":").split(" "))
+            command(port, session.prompt(":").split(" "))
     else:
         print("Waiting for the response...")
         command(port)
