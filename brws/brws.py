@@ -48,14 +48,16 @@ def serve(driver, commandlist, port):
                     ss.sendall(result)
 
 
-def bytesargv():
-    return list(map(os.fsencode, sys.argv))
+def list_to_bytes(los):
+    return list(map(os.fsencode, los))
 
 
-def command(port):
+def command(port, args=None):
+    if args is None:
+        args = sys.argv[1:]
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
         s.connect(("", port))
-        command = bytesargv()[1:]
+        command = list_to_bytes(args)
         command_bytes = b" ".join(command)
         s.sendall(command_bytes)
         result = s.recv(1024).decode()
@@ -69,7 +71,10 @@ def run(driver, port, commands):
         return
     if sys.argv[1] == "commands":
         pprint(commands)
+    if sys.argv[1] == "commander":
+        while True:
+            command(port, input(":").split(" "))
     else:
-        print(":Waiting for the response...")
+        print("Waiting for the response...")
         command(port)
         print("Done.")
