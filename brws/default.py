@@ -34,7 +34,7 @@ def brws_pgdn(driver, _):
 
 
 def brws_history_go(driver, index):
-    driver.execute_script("window.history.go(-1)");
+    driver.execute_script("window.history.go(index)");
 
 
 def brws_go_back(driver, _):
