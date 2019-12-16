@@ -9,9 +9,9 @@ from pprint import pprint
 from prompt_toolkit import PromptSession
 from selenium import webdriver
 
-import command
-from connection import Connection
-from userrinput import UserInput
+from .command import print_commands
+from .connection import Connection
+from .userinput import UserInput
 
 
 @contextmanager
@@ -23,30 +23,13 @@ def start_browser(driver_name, wait=10):
     driver.close()
 
 
-def run_command_with_conn(conn, driver, commandlist, argv):
-    with conn:
-        argv = conn.recv(1024).decode().split(" ")
-        if not argv or not argv[0]:
-            return
-
-        command_name = argv[0]
-        q = " ".join(argv[1:])
-
-        print(f"Running command: {command_name}\n\twith query: {q}")
-        try:
-            return commandlist[command_name](driver, q)
-        except Exception as e:
-            print(e)
-
-
 def serve(driver, commandlist, port):
     with start_browser(driver) as browser:
         with Connection(port, "bind") as connection:
-            for con in connection.wait_for_connections():
-                command, query = con.recv_command_and_query()
+            for command, query in connection.wait_for_connections_and_receive_command_and_query():
                 print(f"Running command: {command}\n\twith query: {query}")
                 try:
-                    return commandlist[command](driver, query)
+                    return commandlist[command](browser, query)
                 except Exception as e:
                     print(e)
 
