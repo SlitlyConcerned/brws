@@ -73,7 +73,14 @@ def run(driver, port, commands):
         serve(driver, commands, port)
         return
     if sys.argv[1] == "commands":
-        pprint(commands)
+        for name, command in commands.items():
+            doc = command.__doc__
+            if doc is None:
+                doc = "No Documentation."
+            else:
+                doc = doc.split("\n")[0]
+            print(name, ": ", doc)
+        return
     if sys.argv[1] == "shell":
         session = PromptSession()
         while True:

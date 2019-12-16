@@ -10,10 +10,12 @@ class User:
         self.sites = {}
 
     def add(self, sitename, login_url, un_id, pw_id, do_enter=True):
-        self.sites[sitename] = lambda driver, _: login(driver, login_url,
+        login_command = lambda driver, _: login(driver, login_url,
                                                        un_id, self.name,
                                                        pw_id, self.password,
                                                        do_enter)
+        login_command.__doc__ = f"Log in to {sitename}"
+        self.sites[sitename] = login_command
 
     def generate_commands(self):
         return {"login/"+sitename:func for sitename, func in self.sites.items()}
