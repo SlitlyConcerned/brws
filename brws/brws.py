@@ -71,7 +71,7 @@ def run(driver, port, commands):
         return
     if sys.argv[1] == "commands":
         pprint(commands)
-    if sys.argv[1] == "commander":
+    if sys.argv[1] == "shell":
         while True:
             command(port, input(":").split(" "))
     else:
