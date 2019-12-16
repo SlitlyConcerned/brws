@@ -4,6 +4,7 @@ import socket
 import subprocess
 import sys
 from contextlib import closing, contextmanager
+from pprint import pprint
 
 from selenium import webdriver
 
@@ -61,6 +62,8 @@ def run(driver, port, commands):
     if sys.argv[1] == "serve":
         serve(driver, commands, port)
         return
+    if sys.argv[1] == "commands":
+        pprint(commands)
     else:
         result = command(port)
         if result:
