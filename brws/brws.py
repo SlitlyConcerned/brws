@@ -20,20 +20,18 @@ def start_browser(driver_name, wait=10):
 
 def run_command_with_conn(conn, driver, commandlist, argv):
     with conn:
-        while True:
-            argv = conn.recv(1024).decode().split(" ")
-            if not argv or not argv[0]:
-                break
+        argv = conn.recv(1024).decode().split(" ")
+        if not argv or not argv[0]:
+            return
 
-            command_name = argv[0]
-            q = " ".join(argv[1:])
+        command_name = argv[0]
+        q = " ".join(argv[1:])
 
-            print(f"Running command: {command_name}\n\twith query: {q}")
-            try:
-                result = commandlist[command_name](driver, q)
-                return result
-            except Exception as e:
-                print(e)
+        print(f"Running command: {command_name}\n\twith query: {q}")
+        try:
+            return commandlist[command_name](driver, q)
+        except Exception as e:
+            print(e)
 
 
 def serve(driver, commandlist, port):
@@ -43,7 +41,11 @@ def serve(driver, commandlist, port):
             ss.listen(1)
             while True:
                 conn, addr = ss.accept()
-                run_command_with_conn(conn, browser, commandlist, port)
+                result = run_command_with_conn(conn, browser, commandlist, port)
+                if result:
+                    if isinstance(result, str):
+                        result = result.encode()
+                    ss.sendall(result)
 
 
 def bytesargv():
@@ -56,6 +58,9 @@ def command(port):
         command = bytesargv()[1:]
         command_bytes = b" ".join(command)
         s.sendall(command_bytes)
+        result = s.recv(1024).decode()
+        if result:
+            print(result)
 
 
 def run(driver, port, commands):
@@ -65,6 +70,6 @@ def run(driver, port, commands):
     if sys.argv[1] == "commands":
         pprint(commands)
     else:
-        result = command(port)
-        if result:
-            print(result)
+        print(":Waiting for the response...")
+        command(port)
+        print("Done.")
