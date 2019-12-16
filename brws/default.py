@@ -20,7 +20,7 @@ def brws_google(driver, query):
 
 
 def brws_youtube(driver, query):
-    driver.get(f"https:/youtube.com/result?q={query}")
+    driver.get(f"https:/youtube.com/search?q={query}")
 
 
 def brws_pgup(driver, _):
