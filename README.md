@@ -24,6 +24,8 @@ commands = default_commands
 
 with User("USERNAME", "PASSWORD") as u:
     u.add("github", "https://github.com/login", "login_field", "password")
+
+    commands = {**commands, **u.generate_commands()}
     
 run("Chrome", 54422, commands)
 
