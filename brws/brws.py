@@ -9,6 +9,10 @@ from pprint import pprint
 from prompt_toolkit import PromptSession
 from selenium import webdriver
 
+import command
+from connection import Connection
+from userrinput import UserInput
+
 
 @contextmanager
 def start_browser(driver_name, wait=10):
@@ -37,33 +41,20 @@ def run_command_with_conn(conn, driver, commandlist, argv):
 
 def serve(driver, commandlist, port):
     with start_browser(driver) as browser:
-        with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as ss:
-            ss.bind(("", port))
-            ss.listen(1)
-            while True:
-                conn, addr = ss.accept()
-                result = run_command_with_conn(conn, browser, commandlist, port)
-                if result:
-                    if isinstance(result, str):
-                        result = result.encode()
-                    ss.sendall(result)
+        with Connection(port, "bind") as connection:
+            for con in connection.wait_for_connections():
+                command, query = con.recv_command_and_query()
+                print(f"Running command: {command}\n\twith query: {query}")
+                try:
+                    return commandlist[command](driver, query)
+                except Exception as e:
+                    print(e)
 
 
-def list_to_bytes(los):
-    return list(map(os.fsencode, los))
-
-
-def command(port, args=None):
-    if args is None:
-        args = sys.argv[1:]
-    if args == [""]:
-        return
-    with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
-        s.connect(("", port))
-        command = list_to_bytes(args)
-        command_bytes = b" ".join(command)
-        s.sendall(command_bytes)
-        result = s.recv(1024).decode()
+def command(port, userinput=None):
+    with Connection(port, "connect") as connection:
+        connection.sendall(userinput)
+        result = connection.receive()
         if result:
             print(result)
 
@@ -73,19 +64,14 @@ def run(driver, port, commands):
         serve(driver, commands, port)
         return
     if sys.argv[1] == "commands":
-        for name, function in commands.items():
-            doc = function.__doc__
-            if doc is None:
-                doc = "No Documentation."
-            else:
-                doc = doc.split("\n")[0]
-            print(name, ": ", doc)
+        command.print_commands(commands)
         return
     if sys.argv[1] == "shell":
         session = PromptSession()
         while True:
-            command(port, session.prompt(":").split(" "))
+            userinput = UserInput(session.prompt(":"))
+            command(port, userinput)
     else:
         print("Waiting for the response...")
-        command(port)
+        command(port, UserInput(sys.argv[1:]))
         print("Done.")
