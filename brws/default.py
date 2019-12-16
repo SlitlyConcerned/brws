@@ -2,10 +2,12 @@ import os
 
 from selenium.webdriver.common.keys import Keys
 
-from brws import run
+from brws import lib, run
 
 
 def brws_get(driver, url):
+    if "http" not in url:
+        url = "https://" + url
     driver.get(url)
 
 
@@ -27,10 +29,12 @@ def brws_pgdn(driver):
     body.send_keys(Keys.PAGE_DOWN)
 
 
-def brws_click(driver, term):
-    for elem in driver.find_elements_by_tag_name("a"):
-        if term in elem.text:
-            elem.click()
+def brws_click(driver, text):
+    lib.click_link_with_text(driver, text)
+
+
+def brws_signup(driver):
+    lib.click_link_with_text(driver, "Sign up")
 
 
 def brws_get_pid(driver):
@@ -40,6 +44,7 @@ def brws_get_pid(driver):
 default_commands = {
     "g": brws_get,
     "c": brws_click,
+    "signup": brws_signup,
     "u": brws_pgup,
     "d": brws_pgdn,
     "ddg": brws_ddg,
