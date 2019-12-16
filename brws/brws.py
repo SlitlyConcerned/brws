@@ -20,16 +20,16 @@ def start_browser(driver_name, wait=10):
 def run_command_with_conn(conn, driver, commandlist, argv):
     with conn:
         while True:
-            argv = conn.recv(1024).decode().split("%ws%")
+            argv = conn.recv(1024).decode().split(" ")
             if not argv or not argv[0]:
                 break
 
             command_name = argv[0]
-            args = argv[1:]
+            q = " ".join(argv[1:])
 
-            print(f"Running command: {command_name}\n\twith aruments: {args}")
+            print(f"Running command: {command_name}\n\twith query: {q}")
             try:
-                result = commandlist[argv[0]](driver, *argv[1:])
+                result = commandlist[command_name](driver, q)
                 return result
             except Exception as e:
                 print(e)
@@ -53,7 +53,7 @@ def command(port):
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
         s.connect(("", port))
         command = bytesargv()[1:]
-        command_bytes = b"%ws%".join(command)
+        command_bytes = b" ".join(command)
         s.sendall(command_bytes)
 
 
